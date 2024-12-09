@@ -1,0 +1,19 @@
+
+ var totalSize = 0.0;
+        foreach (var video in playlist)
+        {
+            Console.WriteLine($"Processing video: {video.Title}");
+            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
+            var streamInfo = streamManifest.GetMuxedStreams().FirstOrDefault(s => s.VideoQuality.Label == desiredQuality);
+            if (streamInfo != null)
+            {
+                // Get the video size
+                var videoSize = streamInfo.Size.MegaBytes;
+                totalSize += videoSize;
+                Console.WriteLine($"Video size: {videoSize:0.00} MB");
+
+            }
+        }
+        Console.WriteLine($"Total Playlist size in {desiredQuality} is: {totalSize} ");
+        Console.WriteLine("Please enter [Y] if You want to containue and [N] for nothing");
+        string op = Console.ReadLine();
