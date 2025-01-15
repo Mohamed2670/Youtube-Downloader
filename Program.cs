@@ -34,7 +34,7 @@ namespace Download
                     Console.WriteLine("Enter the YouTube video URL:");
                     string videoUrl = Console.ReadLine();
                     var audio = new Audio();
-                    await audio.DownloaderAsync(videoUrl);
+                    await audio.DownloaderAsync(videoUrl,"n");
                 }
                 else if (option == "2")
                 {
@@ -43,7 +43,7 @@ namespace Download
                     Console.WriteLine("Enter the desired video quality (e.g., 1080, 720, 480):");
                     string selectedQuality = Console.ReadLine() + 'p';
                     var video = new Video();
-                    await video.DownloaderAsync(videoUrl, selectedQuality);
+                    await video.DownloaderAsync(videoUrl, selectedQuality,"n");
                 }
                 else
                 {

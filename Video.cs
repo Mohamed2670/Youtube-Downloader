@@ -15,6 +15,8 @@ namespace Download
                 var streamManifest = await youtube.Videos.Streams.GetManifestAsync(videoUrl);
                 var video = await youtube.Videos.GetAsync(videoUrl);
                 var title = video.Title;
+                var sanitizedTitle = string.Join("_", title.Split(Path.GetInvalidFileNameChars()));
+
                 var audioStreamInfo = streamManifest
                     .GetAudioStreams()
                     .Where(s => s.Container == Container.Mp4)
@@ -60,7 +62,7 @@ namespace Download
                     Console.WriteLine("Error: Downloads folder not found.");
                     return;
                 }
-                string outputFilePath = Path.Combine(downloadPath, $"{title}.mp4");
+                string filePath = Path.Combine(downloadPath, $"{sanitizedTitle}.mp4");
                 string ffmpegPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg", "ffmpeg.exe");
                 if (!File.Exists(ffmpegPath))
                 {
@@ -68,7 +70,8 @@ namespace Download
                     return;
                 }
                 var streamInfos = new IStreamInfo[] { audioStreamInfo, videoStreamInfo };
-                var conversionRequest = new ConversionRequestBuilder(outputFilePath).SetFFmpegPath(ffmpegPath).Build();
+                var conversionRequest = new ConversionRequestBuilder(filePath).SetFFmpegPath(ffmpegPath).Build();
+
                 var progress = new Progress<double>(percent => ShowProgressBar(percent));
                 await youtube.Videos.DownloadAsync(streamInfos, conversionRequest, progress);
                 Console.WriteLine("\nDownload and muxing completed successfully.");

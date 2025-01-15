@@ -13,6 +13,8 @@ namespace Download
             {
                 var audio = await youtube.Videos.GetAsync(videoUrl);
                 var title = audio.Title;
+                var sanitizedTitle = string.Join("_", title.Split(Path.GetInvalidFileNameChars()));
+
                 var streamManifest = await youtube.Videos.Streams.GetManifestAsync(audio.Id);
                 var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
                 double totalSize = streamInfo.Size.MegaBytes;
@@ -20,7 +22,7 @@ namespace Download
                 if (op != "y")
                 {
                     Console.WriteLine("Do you want to proceed with the download? (y/n)");
-                    op= Console.ReadLine();
+                    op = Console.ReadLine();
                 }
                 if (op?.ToLower() != "y")
                 {
@@ -32,7 +34,8 @@ namespace Download
                 {
                     string downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                     string downloadPath = Path.Combine(downloadFolder, "Downloads");
-                    string filePath = Path.Combine(downloadPath, $"{title}.mp3");
+                    string filePath = Path.Combine(downloadPath, $"{sanitizedTitle}.mp3");
+
                     var progress = new Progress<double>(percent => ShowProgressBar(percent));
                     await youtube.Videos.Streams.DownloadAsync(streamInfo, filePath, progress);
                     Console.WriteLine("\nDownload completed successfully.");
