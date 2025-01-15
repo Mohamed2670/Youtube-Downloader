@@ -22,7 +22,17 @@ namespace Download
                 var videoStreamInfo = streamManifest
                     .GetVideoStreams()
                     .Where(s => s.Container == Container.Mp4)
-                    .FirstOrDefault(s => s.VideoQuality.Label == selectedQuality);
+                    .FirstOrDefault(s => s.VideoQuality.Label == selectedQuality) ??
+                    streamManifest.GetVideoStreams()
+                    .Where(s => s.Container == Container.Mp4)
+                    .OrderByDescending(s => s.VideoQuality.Label)
+                    .FirstOrDefault(s => int.Parse(s.VideoQuality.Label.TrimEnd('p')) < int.Parse(selectedQuality.TrimEnd('p')));
+
+                if (videoStreamInfo == null)
+                {
+                    Console.WriteLine($"No suitable video quality found for {selectedQuality} or lower.");
+                    return;
+                }
 
                 if (audioStreamInfo == null || videoStreamInfo == null)
                 {
