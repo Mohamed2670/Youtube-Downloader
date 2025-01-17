@@ -31,10 +31,11 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
-[Ff]fmeg/
+[Ff]fmpeg/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Ff]inal/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

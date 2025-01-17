@@ -14,6 +14,7 @@ namespace Download
                 Console.WriteLine("[1] Download Playlist");
                 Console.WriteLine("[2] Download Video");
                 Console.WriteLine("[3] Download Audio");
+                Console.WriteLine("[4] Downloading any other videos");
                 Console.Write("Enter your choice: ");
                 string? option = Console.ReadLine()?.Trim();
                 if (option == "1")
@@ -44,6 +45,11 @@ namespace Download
                     string selectedQuality = Console.ReadLine() + 'p';
                     var video = new Video();
                     await video.DownloaderAsync(videoUrl, selectedQuality,"n");
+                }
+                else if(option == "4")
+                {
+                    Test test = new Test();
+                    test.Try();
                 }
                 else
                 {
